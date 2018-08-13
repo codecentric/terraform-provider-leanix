@@ -2,7 +2,7 @@ language: go
 go:
 - '1.10'
 script:
-- go build -v ./...
+- go build
 deploy:
   provider: releases
   api_key:
