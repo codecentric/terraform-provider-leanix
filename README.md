@@ -1,5 +1,7 @@
 # Terraform Provider LeanIX
 
+[![Build Status](https://travis-ci.org/codecentric/terraform-provider-leanix.svg?branch=master)](https://travis-ci.org/codecentric/terraform-provider-leanix)
+
 ## Description
 
 This is a custom [Terraform provider](https://www.terraform.io/docs/providers/index.html) to manage LeanIX resources.
