@@ -2,7 +2,7 @@ language: go
 go:
 - '1.10'
 script:
-- go build -v -o terraform-provider-leanix ./...
+- go build -v ./...
 deploy:
   provider: releases
   api_key:
