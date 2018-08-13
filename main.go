@@ -1,4 +1,4 @@
-package leanix
+package main
 
 import (
 	"github.com/codecentric/terraform-provider-leanix/leanix"
