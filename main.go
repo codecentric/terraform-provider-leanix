@@ -1,7 +1,7 @@
 package leanix
 
 import (
-	"terraform-provider-leanix/leanix"
+	"github.com/codecentric/terraform-provider-leanix/leanix"
 
 	"github.com/hashicorp/terraform/plugin"
 	"github.com/hashicorp/terraform/terraform"
