@@ -1,14 +1,22 @@
 language: go
+
 go:
 - '1.10'
+
+env:
+    - GIMME_OS=linux GIMME_ARCH=amd64
+    - GIMME_OS=darwin GIMME_ARCH=amd64
+    - GIMME_OS=windows GIMME_ARCH=amd64
+
 script:
-- go build
+- go build -o terraform-provider-leanix_${GIMME_OS}-${GIMME_ARCH}
+
 deploy:
   skip_cleanup: true
   provider: releases
   api_key:
     secure: E32dvNv2iC80HvzhgIk8Zc0bTEJ0n4cUcC86+DyNq0Tfv6cvoNZACepArOrbuRdvU6KvmKgrE/lwBSztFArCU1OgknS9baUHkUbGyWKGdB6Ts3eJMfPbHEEzSr5tP1KYqOJaGTCxlRfyaGBIm0U5ZNLxuk/fFdSF3Y0nA2b24XSZnwpl0TWs8R+bDvQYmpBNkqzyz7kfGTrzQi5LTBpAGhANFGKTTIl0gz3dJPBqbctXad3BzY4Lu8bI5NftwyFDqj3nGasVWlhC6iAonzm5MNCVbannEHUkETaROuAvEUqtu+lgFLB7NxIIEg66Qc1Q4yzrt8WgKnf4L5rscllVnz8ZjVVmE2UYamW3IJjtlwpBZ/pSekcibk8od+HMrob4mxXG7U8CUoTxbz1m2JyY6VbtYj7q0Thzlq1FiSgmZL+xVpu8V0ACtiEgoAZV3EyHQRa93t6XJvYw+TNXv+Vof/f8+uEY2YrRxPT1TYQ6vss4+WGAMHIDINMuTDoyZnk7xHgVSxeXuW01odkuer2fOaJNJH55h/cQYRojMYVtLUUtx5/pDX9DI+gLPjnS8pAtdR9BBj4aBAcmCSt5jmU3FSsPGLLaChZn0cq4QEnCuLh1VT4r9txyhakejsEHC5qfp+f38FFToQ4T56kD5i14MTS/WKGDYBF4OB+b1KYvagg=
-  file: terraform-provider-leanix
+  file: terraform-provider-leanix_${GIMME_OS}-${GIMME_ARCH}
   on:
     repo: codecentric/terraform-provider-leanix
     tags: true
