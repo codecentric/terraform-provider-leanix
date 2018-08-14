@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -105,13 +106,18 @@ func (leanix *LeanixClient) CreateWebhookSubscription(subscription WebhookSubscr
 	}
 	defer resp.Body.Close()
 
+	bodyBytes, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
 	subscriptionResponse := WebhookSubscriptionResponse{}
-	err = json.NewDecoder(resp.Body).Decode(&subscriptionResponse)
+	err = json.Unmarshal(bodyBytes, &subscriptionResponse)
 	if err != nil {
 		return nil, err
 	}
 	if subscriptionResponse.Subscription == nil || subscriptionResponse.Subscription.Id == nil {
-		return nil, errors.New("Failed to create subscription '" + subscription.Identifier + "'. Maybe it was already created outside of Terraform?")
+		return nil, errors.New("Failed to create subscription '" + subscription.Identifier + "'. Maybe it was already created outside of Terraform? Here's the response from LeanIX: " + string(bodyBytes))
 	}
 	newSubscription := subscriptionResponse.Subscription
 
@@ -137,13 +143,18 @@ func (leanix *LeanixClient) ReadWebhookSubscription(subscriptionId string) (*Web
 	}
 	defer resp.Body.Close()
 
+	bodyBytes, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
 	subscriptionResponse := WebhookSubscriptionResponse{}
-	err = json.NewDecoder(resp.Body).Decode(&subscriptionResponse)
+	err = json.Unmarshal(bodyBytes, &subscriptionResponse)
 	if err != nil {
 		return nil, err
 	}
 	if subscriptionResponse.Subscription == nil || subscriptionResponse.Subscription.Id == nil {
-		return nil, errors.New("Failed to read subscription '" + subscriptionId + "'. Maybe it was already deleted outside of Terraform?")
+		return nil, errors.New("Failed to read subscription '" + subscriptionId + "'. Maybe it was already deleted outside of Terraform? Here's the response from LeanIX: " + string(bodyBytes))
 	}
 	subscription := subscriptionResponse.Subscription
 
@@ -174,13 +185,18 @@ func (leanix *LeanixClient) UpdateWebhookSubscription(subscription WebhookSubscr
 	}
 	defer resp.Body.Close()
 
+	bodyBytes, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
 	subscriptionResponse := WebhookSubscriptionResponse{}
-	err = json.NewDecoder(resp.Body).Decode(&subscriptionResponse)
+	err = json.Unmarshal(bodyBytes, &subscriptionResponse)
 	if err != nil {
 		return nil, err
 	}
 	if subscriptionResponse.Subscription == nil || subscriptionResponse.Subscription.Id == nil {
-		return nil, errors.New("Failed to update subscription '" + subscription.Identifier + "'. Maybe it was already created outside of Terraform?")
+		return nil, errors.New("Failed to update subscription '" + subscription.Identifier + "'. Maybe it was already created outside of Terraform? Here's the response from LeanIX: " + string(bodyBytes))
 	}
 	newSubscription := subscriptionResponse.Subscription
 
@@ -206,13 +222,18 @@ func (leanix *LeanixClient) DeleteWebhookSubscription(subscriptionId string) (*W
 	}
 	defer resp.Body.Close()
 
+	bodyBytes, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
 	subscriptionResponse := WebhookSubscriptionResponse{}
-	err = json.NewDecoder(resp.Body).Decode(&subscriptionResponse)
+	err = json.Unmarshal(bodyBytes, &subscriptionResponse)
 	if err != nil {
 		return nil, err
 	}
 	if subscriptionResponse.Subscription == nil || subscriptionResponse.Subscription.Id == nil {
-		return nil, errors.New("Failed to delete subscription with ID'" + subscriptionId + "'. Maybe it was already deleted outside of Terraform?")
+		return nil, errors.New("Failed to delete subscription with ID'" + subscriptionId + "'. Maybe it was already deleted outside of Terraform? Here's the response from LeanIX: " + string(bodyBytes))
 	}
 	deletedSubscription := subscriptionResponse.Subscription
 
