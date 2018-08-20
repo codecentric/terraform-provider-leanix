@@ -12,5 +12,6 @@ type WebhookSubscription struct {
 	Callback            string     `json:"callback",omitempty`
 	IgnoreError         bool       `json:"ignoreError"`
 	WorkspaceConstraint string     `json:"workspaceConstraint"`
+	PayloadMode         string     `json:"payloadMode"`
 	Active              bool       `json:"active"`
 }

@@ -43,6 +43,11 @@ func resourceLeanixWebhookSubscription() *schema.Resource {
 				Optional: true,
 				Default:  "ANY",
 			},
+			"payload_mode": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+				Default:  "DEFAULT",
+			},
 			"active": &schema.Schema{
 				Type:     schema.TypeBool,
 				Default:  true,
@@ -86,6 +91,7 @@ func resourceLeanixWebhookSubscriptionCreate(d *schema.ResourceData, meta interf
 		Callback:            d.Get("callback").(string),
 		IgnoreError:         d.Get("ignore_error").(bool),
 		WorkspaceConstraint: d.Get("workspace_constraint").(string),
+		PayloadMode:         d.Get("payload_mode").(string),
 		Active:              d.Get("active").(bool),
 	}
 	created, err := leanixClient.CreateWebhookSubscription(subscription)
@@ -123,6 +129,7 @@ func resourceLeanixWebhookSubscriptionRead(d *schema.ResourceData, meta interfac
 	d.Set("callback", subscription.Callback)
 	d.Set("ignore_error", subscription.IgnoreError)
 	d.Set("workspace_constraint", subscription.WorkspaceConstraint)
+	d.Set("payload_mode", subscription.PayloadMode)
 	d.Set("active", subscription.Active)
 
 	return nil
@@ -148,6 +155,7 @@ func resourceLeanixWebhookSubscriptionUpdate(d *schema.ResourceData, meta interf
 		Callback:            d.Get("callback").(string),
 		IgnoreError:         d.Get("ignore_error").(bool),
 		WorkspaceConstraint: d.Get("workspace_constraint").(string),
+		PayloadMode:         d.Get("payload_mode").(string),
 		Active:              d.Get("active").(bool),
 	}
 	updated, err := leanixClient.UpdateWebhookSubscription(subscription)
