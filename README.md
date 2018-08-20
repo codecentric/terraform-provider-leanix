@@ -34,6 +34,7 @@ resource "leanix_webhook_subscription" "example" {
   authorization_header = "Basic dXNlcjpwYXNzCg=="
   callback             = "delivery.payload = { payload: \"foo\" };"
   workspace_constraint = "ANY"
+  payload_mode         = "WRAPPED_EVENT"
   active               = true
   workspace_id         = "aa32abbf-8093-410d-a090-10c7735952cf"
 
