@@ -1,15 +1,16 @@
 language: go
 
 go:
-- '1.10'
+  - '1.10'
 
 env:
-    - GIMME_OS=linux GIMME_ARCH=amd64
-    - GIMME_OS=darwin GIMME_ARCH=amd64
-    - GIMME_OS=windows GIMME_ARCH=amd64
+  - GIMME_OS=linux GIMME_ARCH=amd64
+  - GIMME_OS=darwin GIMME_ARCH=amd64
+  - GIMME_OS=windows GIMME_ARCH=amd64
 
 script:
-- go build -o terraform-provider-leanix_${GIMME_OS}-${GIMME_ARCH}
+  - go test -v ./...
+  - go build -o terraform-provider-leanix_${GIMME_OS}-${GIMME_ARCH}
 
 deploy:
   skip_cleanup: true

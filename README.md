@@ -58,7 +58,7 @@ resource "leanix_webhook_subscription" "example" {
 
 # Installation
 
-The provider needs to be installed as a [third-party plugin](https://www.terraform.io/docs/configuration/providers.html#third-party-plugins). A quick and convenient way is to download the correct binary for your platform from the [GitHub release page](https://github.com/codecentric/terraform-provider-leanix/releases). 
+The provider needs to be installed as a [third-party plugin](https://www.terraform.io/docs/configuration/providers.html#third-party-plugins). A quick and convenient way is to download the correct binary for your platform from the [GitHub release page](https://github.com/codecentric/terraform-provider-leanix/releases).
 
 Then you can rename it to `terraform-provider-leanix` and place it inside the folder containing your `.tf` files. Terraform will load the provider plugin on startup automatically based on the filename `terraform-provider-*`.
 
@@ -66,4 +66,11 @@ Then you can rename it to `terraform-provider-leanix` and place it inside the fo
 
 1. Install dependencies with `go get`
 2. Execute tests with `go test ./...`
-2. Package provider executable with `go build`
+3. Execute acceptance tests (optional)
+   ```
+   LEANIX_API_TOKEN="<leanix_api_token>" \
+   LEANIX_URL="<leanix_url>" \
+   TF_ACC=1 \
+   go test -v ./...
+   ```
+4. Package provider executable with `go build`
