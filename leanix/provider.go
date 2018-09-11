@@ -10,12 +10,13 @@ func Provider() *schema.Provider {
 			"url": &schema.Schema{
 				Type:        schema.TypeString,
 				Optional:    true,
-				Default:     "https://svc.leanix.net",
+				DefaultFunc: schema.EnvDefaultFunc("LEANIX_URL", "https://svc.leanix.net"),
 				Description: "LeanIX service URL.",
 			},
 			"api_token": &schema.Schema{
 				Type:        schema.TypeString,
 				Required:    true,
+				DefaultFunc: schema.EnvDefaultFunc("LEANIX_API_TOKEN", nil),
 				Description: "The LeanIX API token required to authenticate with LeanIX. See https://dev.leanix.net/docs/authentication for details.",
 			},
 		},
