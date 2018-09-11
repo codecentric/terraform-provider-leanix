@@ -28,7 +28,7 @@ func Provider() *schema.Provider {
 }
 
 func configureProvider(d *schema.ResourceData) (interface{}, error) {
-	return *NewLeanixClient(
+	return NewLeanixClient(
 		d.Get("url").(string),
 		d.Get("api_token").(string),
 	), nil
