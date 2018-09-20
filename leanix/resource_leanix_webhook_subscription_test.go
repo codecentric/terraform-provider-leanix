@@ -16,7 +16,7 @@ import (
 func TestLeanixWebhookSubscription_basic(t *testing.T) {
 	var subscription WebhookSubscription
 
-	// generate a random name for each widget test run, to avoid
+	// generate a random name for each subscription test run, to avoid
 	// collisions from multiple concurrent tests.
 	// the acctest package includes many helpers such as RandStringFromCharSet
 	// See https://godoc.org/github.com/hashicorp/terraform/helper/acctest
@@ -155,7 +155,7 @@ func testSubscriptionResourceDestroy(s *terraform.State) error {
 	return nil
 }
 
-// testSubscriptionResource returns an configuration for an Example Widget with the provided name
+// testSubscriptionResource returns an configuration for an example subscription with the provided name
 func testSubscriptionResource(name string) string {
 	return fmt.Sprintf(`
 resource "leanix_webhook_subscription" "test" {
