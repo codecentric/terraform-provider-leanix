@@ -2,9 +2,10 @@ package leanix
 
 import (
 	"github.com/hashicorp/terraform/helper/schema"
+	"github.com/hashicorp/terraform/terraform"
 )
 
-func Provider() *schema.Provider {
+func Provider() terraform.ResourceProvider {
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
 			"url": &schema.Schema{
@@ -28,7 +29,7 @@ func Provider() *schema.Provider {
 }
 
 func configureProvider(d *schema.ResourceData) (interface{}, error) {
-	return *NewLeanixClient(
+	return NewLeanixClient(
 		d.Get("url").(string),
 		d.Get("api_token").(string),
 	), nil

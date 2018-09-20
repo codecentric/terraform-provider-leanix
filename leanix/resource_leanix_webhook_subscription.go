@@ -78,7 +78,7 @@ func resourceLeanixWebhookSubscription() *schema.Resource {
 }
 
 func resourceLeanixWebhookSubscriptionCreate(d *schema.ResourceData, meta interface{}) error {
-	leanixClient := meta.(LeanixClient)
+	leanixClient := meta.(*LeanixClient)
 
 	subscription := WebhookSubscription{
 		Identifier:          d.Get("identifier").(string),
@@ -104,7 +104,7 @@ func resourceLeanixWebhookSubscriptionCreate(d *schema.ResourceData, meta interf
 }
 
 func resourceLeanixWebhookSubscriptionRead(d *schema.ResourceData, meta interface{}) error {
-	leanixClient := meta.(LeanixClient)
+	leanixClient := meta.(*LeanixClient)
 
 	subscriptionId := d.Id()
 	if subscriptionId == "" {
@@ -136,7 +136,7 @@ func resourceLeanixWebhookSubscriptionRead(d *schema.ResourceData, meta interfac
 }
 
 func resourceLeanixWebhookSubscriptionUpdate(d *schema.ResourceData, meta interface{}) error {
-	leanixClient := meta.(LeanixClient)
+	leanixClient := meta.(*LeanixClient)
 
 	subscriptionId := d.Id()
 	if subscriptionId == "" {
@@ -168,7 +168,7 @@ func resourceLeanixWebhookSubscriptionUpdate(d *schema.ResourceData, meta interf
 }
 
 func resourceLeanixWebhookSubscriptionDelete(d *schema.ResourceData, meta interface{}) error {
-	leanixClient := meta.(LeanixClient)
+	leanixClient := meta.(*LeanixClient)
 
 	subscriptionId := d.Id()
 	if subscriptionId == "" {
