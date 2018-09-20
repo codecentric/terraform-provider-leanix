@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -15,7 +16,7 @@ import (
 
 type LeanixClient struct {
 	url                string
-	apiToken           string
+	authHeader         string
 	http               *http.Client
 	authorizationToken *string
 	sync.Mutex
@@ -31,14 +32,14 @@ type WebhookSubscriptionResponse struct {
 	Subscription *WebhookSubscription `json:"data"`
 }
 
-func NewLeanixClient(url string, apiToken string) *LeanixClient {
+func NewLeanixClient(url string, authHeader string) *LeanixClient {
 	httpClient :=
 		&http.Client{
 			Timeout: time.Second * time.Duration(10),
 		}
 	return &LeanixClient{
 		url:                url,
-		apiToken:           apiToken,
+		authHeader:         authHeader,
 		http:               httpClient,
 		authorizationToken: nil,
 	}
@@ -60,7 +61,7 @@ func (leanix *LeanixClient) getAuthorizationHeader() (string, error) {
 		postUrl := leanix.url + "/services/mtm/v1/oauth2/token"
 		postBody := url.Values{"grant_type": {"client_credentials"}}
 		req, err := http.NewRequest("POST", postUrl, strings.NewReader(postBody.Encode()))
-		req.SetBasicAuth("apitoken", leanix.apiToken)
+		req.Header.Add("Authorization", leanix.authHeader)
 		req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 		req.Header.Add("Content-Length", strconv.Itoa(len(postBody.Encode())))
 		resp, err := leanix.http.Do(req)
@@ -69,6 +70,11 @@ func (leanix *LeanixClient) getAuthorizationHeader() (string, error) {
 		if err != nil {
 			return "", err
 		}
+
+		if resp.StatusCode != 200 {
+			return "", errors.New(fmt.Sprintf("Status code must be 200 but is %d", resp.StatusCode))
+		}
+
 		defer resp.Body.Close()
 
 		authResponse := AuthResponse{}

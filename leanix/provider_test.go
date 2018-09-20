@@ -32,7 +32,7 @@ func testAccPreCheck(t *testing.T) {
 	if os.Getenv("LEANIX_URL") == "" {
 		t.Fatal("LEANIX_URL must be set for acceptance tests")
 	}
-	if os.Getenv("LEANIX_API_TOKEN") == "" {
-		t.Fatal("LEANIX_API_TOKEN must be set for acceptance tests")
+	if os.Getenv("LEANIX_AUTH_HEADER") == "" {
+		t.Fatal("LEANIX_AUTH_HEADER must be set for acceptance tests")
 	}
 }

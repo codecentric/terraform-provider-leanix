@@ -12,8 +12,8 @@ The LeanIX provider requires a valid LeanIX URL and an API key to authenticate. 
 
 ```
 provider "leanix" {
-  url       = "https://svc.leanix.net"                   // = LEANIX_URL
-  api_token = "aVQEzWKwE2sSp3rhVKWwaVQEzWKwE2sSp3rhVKWw" // = LEANIX_API_TOKEN
+  url         = "https://svc.leanix.net"                                                     // = LEANIX_URL
+  auth_header = "Basic ${base64encode("apitoken:aVQEzWKwE2sSp3rhVKWwaVQEzWKwE2sSp3rhVKWw")}" // = LEANIX_AUTH_HEADER
 }
 ```
 
@@ -68,7 +68,7 @@ Then you can rename it to `terraform-provider-leanix` and place it inside the fo
 2. Execute tests with `go test ./...`
 3. Execute acceptance tests (optional)
    ```
-   LEANIX_API_TOKEN="<leanix_api_token>" \
+   LEANIX_AUTH_HEADER="<leanix_auth_header>" \
    LEANIX_URL="<leanix_url>" \
    TF_ACC=1 \
    go test -v ./...

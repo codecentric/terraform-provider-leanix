@@ -14,11 +14,11 @@ func Provider() terraform.ResourceProvider {
 				DefaultFunc: schema.EnvDefaultFunc("LEANIX_URL", "https://svc.leanix.net"),
 				Description: "LeanIX service URL.",
 			},
-			"api_token": &schema.Schema{
+			"auth_header": &schema.Schema{
 				Type:        schema.TypeString,
 				Required:    true,
-				DefaultFunc: schema.EnvDefaultFunc("LEANIX_API_TOKEN", nil),
-				Description: "The LeanIX API token required to authenticate with LeanIX. See https://dev.leanix.net/docs/authentication for details.",
+				DefaultFunc: schema.EnvDefaultFunc("LEANIX_AUTH_HEADER", nil),
+				Description: "The LeanIX authentication header based on API token or client secret required to authenticate with LeanIX. See https://dev.leanix.net/docs/authentication for details.",
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
@@ -31,6 +31,6 @@ func Provider() terraform.ResourceProvider {
 func configureProvider(d *schema.ResourceData) (interface{}, error) {
 	return NewLeanixClient(
 		d.Get("url").(string),
-		d.Get("api_token").(string),
+		d.Get("auth_header").(string),
 	), nil
 }

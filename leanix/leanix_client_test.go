@@ -8,8 +8,13 @@ import (
 	"testing"
 )
 
+func apiTokenAndLeanixBasicAuthHeader() (string, string) {
+	const apiToken = "aVQEzWKwE2sSp3rhVKWwaVQEzWKwE2sSp3rhVKWw"
+	return apiToken, "Basic " + base64.StdEncoding.EncodeToString([]byte("apitoken:"+apiToken))
+}
+
 func TestGetAuthorizationHeader(t *testing.T) {
-	apiToken := "aVQEzWKwE2sSp3rhVKWwaVQEzWKwE2sSp3rhVKWw"
+	apiToken, leanixBasicAuthHeader := apiTokenAndLeanixBasicAuthHeader()
 	authRoute, authHeader := NewAuthRouteDefinition(t, apiToken)
 
 	testServer := NewTestServer(
@@ -22,7 +27,7 @@ func TestGetAuthorizationHeader(t *testing.T) {
 	defer testServer.Close()
 	client := NewLeanixClient(
 		testServer.URL,
-		apiToken,
+		leanixBasicAuthHeader,
 	)
 	header, err := client.getAuthorizationHeader()
 	if err != nil {
@@ -32,7 +37,7 @@ func TestGetAuthorizationHeader(t *testing.T) {
 }
 
 func TestCreateWebhookSubscription(t *testing.T) {
-	apiToken := "aVQEzWKwE2sSp3rhVKWwaVQEzWKwE2sSp3rhVKWw"
+	apiToken, leanixBasicAuthHeader := apiTokenAndLeanixBasicAuthHeader()
 	authRoute, authHeader := NewAuthRouteDefinition(t, apiToken)
 
 	subscription := &WebhookSubscription{
@@ -92,7 +97,7 @@ func TestCreateWebhookSubscription(t *testing.T) {
 	defer testServer.Close()
 	client := NewLeanixClient(
 		testServer.URL,
-		apiToken,
+		leanixBasicAuthHeader,
 	)
 	subscriptionResponse, err := client.CreateWebhookSubscription(*subscription)
 	if err != nil {
@@ -104,7 +109,7 @@ func TestCreateWebhookSubscription(t *testing.T) {
 }
 
 func TestReadWebhookSubscription(t *testing.T) {
-	apiToken := "aVQEzWKwE2sSp3rhVKWwaVQEzWKwE2sSp3rhVKWw"
+	apiToken, leanixBasicAuthHeader := apiTokenAndLeanixBasicAuthHeader()
 	authRoute, authHeader := NewAuthRouteDefinition(t, apiToken)
 
 	subscriptionId := "id"
@@ -158,7 +163,7 @@ func TestReadWebhookSubscription(t *testing.T) {
 	defer testServer.Close()
 	client := NewLeanixClient(
 		testServer.URL,
-		apiToken,
+		leanixBasicAuthHeader,
 	)
 	subscriptionResponse, err := client.ReadWebhookSubscription(subscriptionId)
 	if err != nil {
@@ -168,7 +173,7 @@ func TestReadWebhookSubscription(t *testing.T) {
 }
 
 func TestUpdateWebhookSubscription(t *testing.T) {
-	apiToken := "aVQEzWKwE2sSp3rhVKWwaVQEzWKwE2sSp3rhVKWw"
+	apiToken, leanixBasicAuthHeader := apiTokenAndLeanixBasicAuthHeader()
 	authRoute, authHeader := NewAuthRouteDefinition(t, apiToken)
 
 	subscriptionId := "id"
@@ -228,7 +233,7 @@ func TestUpdateWebhookSubscription(t *testing.T) {
 	defer testServer.Close()
 	client := NewLeanixClient(
 		testServer.URL,
-		apiToken,
+		leanixBasicAuthHeader,
 	)
 	subscriptionResponse, err := client.UpdateWebhookSubscription(*subscription)
 	if err != nil {
@@ -238,7 +243,7 @@ func TestUpdateWebhookSubscription(t *testing.T) {
 }
 
 func TestDeleteWebhookSubscription(t *testing.T) {
-	apiToken := "aVQEzWKwE2sSp3rhVKWwaVQEzWKwE2sSp3rhVKWw"
+	apiToken, leanixBasicAuthHeader := apiTokenAndLeanixBasicAuthHeader()
 	authRoute, authHeader := NewAuthRouteDefinition(t, apiToken)
 
 	subscriptionId := "id"
@@ -292,7 +297,7 @@ func TestDeleteWebhookSubscription(t *testing.T) {
 	defer testServer.Close()
 	client := NewLeanixClient(
 		testServer.URL,
-		apiToken,
+		leanixBasicAuthHeader,
 	)
 	subscriptionResponse, err := client.DeleteWebhookSubscription(subscriptionId)
 	if err != nil {
