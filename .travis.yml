@@ -9,7 +9,7 @@ env:
   - GIMME_OS=windows GIMME_ARCH=amd64
 
 script:
-  - go test -v ./...
+  - GOOS= go test -v ./...
   - go build -o terraform-provider-leanix_${GIMME_OS}-${GIMME_ARCH}
 
 deploy:
