@@ -8,12 +8,12 @@ This is a custom [Terraform provider](https://www.terraform.io/docs/providers/in
 
 ## Provider Configuration
 
-The LeanIX provider requires a valid LeanIX URL and an API key to authenticate. Please make sure that the API key has the required permissions to manage the resources you want to use.
+The LeanIX provider requires a valid LeanIX URL and an API key to authenticate. Please make sure that the API key has the required permissions to manage the resources you want to use. You can either set the URL and API token directly in the provider, or use the environment variables.
 
 ```
 provider "leanix" {
-  url       = "https://svc.leanix.net"
-  api_token = "aVQEzWKwE2sSp3rhVKWwaVQEzWKwE2sSp3rhVKWw"
+  url       = "https://svc.leanix.net"                   // = LEANIX_URL
+  api_token = "aVQEzWKwE2sSp3rhVKWwaVQEzWKwE2sSp3rhVKWw" // = LEANIX_API_TOKEN
 }
 ```
 
