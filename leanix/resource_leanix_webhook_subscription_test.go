@@ -1,7 +1,9 @@
 package leanix
 
 import (
+	"encoding/base64"
 	"fmt"
+	"reflect"
 	"strings"
 	"testing"
 
@@ -10,6 +12,7 @@ import (
 	"github.com/hashicorp/terraform/terraform"
 )
 
+// https://www.terraform.io/docs/extend/best-practices/testing.html
 func TestLeanixWebhookSubscription_basic(t *testing.T) {
 	var subscription WebhookSubscription
 
@@ -22,36 +25,90 @@ func TestLeanixWebhookSubscription_basic(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
-		CheckDestroy: testAccCheckExampleResourceDestroy,
+		CheckDestroy: testSubscriptionResourceDestroy,
 		Steps: []resource.TestStep{
 			{
 				// use a dynamic configuration with the random name from above
-				Config: testAccExampleResource(resourceName),
+				Config: testSubscriptionResource(resourceName),
 				// compose a basic test, checking both remote and local values
 				Check: resource.ComposeTestCheckFunc(
 					// query the API to retrieve the subscription object
-					testAccCheckExampleResourceExists("leanix_webhook_subscription.test", &subscription),
+					testCheckResourceExists("leanix_webhook_subscription.test", &subscription),
 					// verify remote values
-					testAccCheckExampleSubscriptionValues(&subscription, resourceName),
+					testCheckSubscriptionResourceValues(&subscription, resourceName),
 					// verify local values https://www.terraform.io/docs/extend/testing/acceptance-tests/teststep.html#builtin-check-functions
 					resource.TestCheckResourceAttr("leanix_webhook_subscription.test", "identifier", resourceName),
+					resource.TestCheckResourceAttr("leanix_webhook_subscription.test", "ignore_error", "false"),
+					resource.TestCheckResourceAttr("leanix_webhook_subscription.test", "target_url", "http://localhost:1234"),
+					resource.TestCheckResourceAttr("leanix_webhook_subscription.test", "target_method", "POST"),
+					resource.TestCheckResourceAttr("leanix_webhook_subscription.test", "authorization_header", "Basic "+base64.StdEncoding.EncodeToString([]byte("user:pass"))),
+					resource.TestCheckResourceAttr("leanix_webhook_subscription.test", "callback", "throw delivery.payload;"),
+					resource.TestCheckResourceAttr("leanix_webhook_subscription.test", "workspace_constraint", "ANY"),
+					resource.TestCheckResourceAttr("leanix_webhook_subscription.test", "payload_mode", "WRAPPED_EVENT"),
+					resource.TestCheckResourceAttr("leanix_webhook_subscription.test", "active", "true"),
+					resource.TestCheckResourceAttr("leanix_webhook_subscription.test", "workspace_id", "8751abbf-8093-410d-a090-10c7735952cf"),
+					resource.TestCheckResourceAttr("leanix_webhook_subscription.test", "tag_set.#", "2"),
 				),
 			},
 		},
 	})
 }
 
-func testAccCheckExampleSubscriptionValues(subscription *WebhookSubscription, identifier string) resource.TestCheckFunc {
+func testCheckSubscriptionResourceValues(subscription *WebhookSubscription, resourceName string) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
-		if subscription.Identifier != identifier {
-			return fmt.Errorf("bad name, expected \"%s\", got: %#v", identifier, subscription.Identifier)
+		var expectedIdentifier = resourceName
+		if subscription.Identifier != expectedIdentifier {
+			return fmt.Errorf("Bad subscription.Identifier, expected \"%s\", got: %#v", expectedIdentifier, subscription.Identifier)
+		}
+		var expectedIgnoreError = false
+		if subscription.IgnoreError != expectedIgnoreError {
+			return fmt.Errorf("Bad subscription.IgnoreError, expected \"%v\", got: %#v", expectedIgnoreError, subscription.IgnoreError)
+		}
+		var expectedTargetUrl = "http://localhost:1234"
+		if subscription.TargetUrl != expectedTargetUrl {
+			return fmt.Errorf("Bad subscription.TargetUrl, expected \"%s\", got: %#v", expectedTargetUrl, subscription.TargetUrl)
+		}
+		var expectedTargetMethod = "POST"
+		if subscription.TargetMethod != expectedTargetMethod {
+			return fmt.Errorf("Bad subscription.TargetMethod, expected \"%s\", got: %#v", expectedTargetMethod, subscription.TargetMethod)
+		}
+		var expectedAuthorizationHeader = "Basic " + base64.StdEncoding.EncodeToString([]byte("user:pass"))
+		if subscription.AuthorizationHeader != expectedAuthorizationHeader {
+			return fmt.Errorf("Bad subscription.AuthorizationHeader, expected \"%s\", got: %#v", expectedAuthorizationHeader, subscription.AuthorizationHeader)
+		}
+		var expectedCallback = "throw delivery.payload;"
+		if subscription.Callback != expectedCallback {
+			return fmt.Errorf("Bad subscription.Callback, expected \"%s\", got: %#v", expectedCallback, subscription.Callback)
+		}
+		var expectedWorkspaceConstraint = "ANY"
+		if subscription.WorkspaceConstraint != expectedWorkspaceConstraint {
+			return fmt.Errorf("Bad subscription.WorkspaceConstraint, expected \"%s\", got: %#v", expectedWorkspaceConstraint, subscription.WorkspaceConstraint)
+		}
+		var expectedPayloadMode = "WRAPPED_EVENT"
+		if subscription.PayloadMode != expectedPayloadMode {
+			return fmt.Errorf("Bad subscription.PayloadMode, expected \"%s\", got: %#v", expectedPayloadMode, subscription.PayloadMode)
+		}
+		var expectedActive = true
+		if subscription.Active != expectedActive {
+			return fmt.Errorf("Bad subscription.Active, expected \"%v\", got: %#v", expectedActive, subscription.Active)
+		}
+		var expectedWorkspaceId = "8751abbf-8093-410d-a090-10c7735952cf"
+		if subscription.WorkspaceId != expectedWorkspaceId {
+			return fmt.Errorf("Bad subscription.WorkspaceId, expected \"%s\", got: %#v", expectedWorkspaceId, subscription.WorkspaceId)
+		}
+		var expectedTagSets = [][]string{
+			[]string{"pathfinder", "FACT_SHEET_UPDATED"},
+			[]string{"pathfinder", "FACT_SHEET_ARCHIVED"},
+		}
+		if !reflect.DeepEqual(subscription.TagSets, expectedTagSets) {
+			return fmt.Errorf("Bad subscription.TagSets, expected \"%s\", got: %#v", expectedTagSets, subscription.TagSets)
 		}
 		return nil
 	}
 }
 
-// testAccCheckExampleResourceExists queries the API and retrieves the matching subscription.
-func testAccCheckExampleResourceExists(target string, subscription *WebhookSubscription) resource.TestCheckFunc {
+// testCheckResourceExists queries the API and retrieves the matching subscription.
+func testCheckResourceExists(target string, subscription *WebhookSubscription) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 		// find the corresponding state object
 		rs, ok := s.RootModule().Resources[target]
@@ -73,34 +130,33 @@ func testAccCheckExampleResourceExists(target string, subscription *WebhookSubsc
 	}
 }
 
-// testAccCheckExampleResourceDestroy verifies the subscription has been destroyed
-func testAccCheckExampleResourceDestroy(s *terraform.State) error {
+// testSubscriptionResourceDestroy verifies the subscription has been destroyed
+func testSubscriptionResourceDestroy(s *terraform.State) error {
 	// retrieve the connection established in Provider configuration
 	leanix := testAccProvider.Meta().(*LeanixClient)
 
-	// loop through the resources in state, verifying each widget
-	// is destroyed
+	// loop through the resources in state, verifying each subscription is destroyed
 	for _, rs := range s.RootModule().Resources {
-		if rs.Type != "example_widget" {
+		if rs.Type != "leanix_webhook_subscription" {
 			continue
 		}
 
 		_, err := leanix.ReadWebhookSubscription(rs.Primary.ID)
 		if err == nil {
-			return fmt.Errorf("Widget (%s) still exists.", rs.Primary.ID)
+			return fmt.Errorf("Subscription (%s) still exists.", rs.Primary.ID)
 		}
 
 		// If the error is equivelent to 404 not found, the subscription is destroyed.
 		// Otherwise return the error
-		if !strings.Contains(err.Error(), "Widget not found") {
+		if !strings.Contains(err.Error(), "No such subscription") {
 			return err
 		}
 	}
 	return nil
 }
 
-// testAccExampleResource returns an configuration for an Example Widget with the provided name
-func testAccExampleResource(name string) string {
+// testSubscriptionResource returns an configuration for an Example Widget with the provided name
+func testSubscriptionResource(name string) string {
 	return fmt.Sprintf(`
 resource "leanix_webhook_subscription" "test" {
   identifier           = "%s"
@@ -123,6 +179,7 @@ resource "leanix_webhook_subscription" "test" {
   }
 }`, name)
 }
+
 func TestPackageTagSets(t *testing.T) {
 	input := [][]string{
 		[]string{"a", "b"},
