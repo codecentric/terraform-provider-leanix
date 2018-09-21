@@ -171,11 +171,23 @@ resource "leanix_webhook_subscription" "test" {
   workspace_id         = "8751abbf-8093-410d-a090-10c7735952cf"
 
   tag_set {
-    tags = ["pathfinder", "FACT_SHEET_UPDATED"]
+    tag {
+      value = "pathfinder"
+    }
+
+    tag {
+      value = "FACT_SHEET_UPDATED"
+    }
   }
 
   tag_set {
-    tags = ["pathfinder", "FACT_SHEET_ARCHIVED"]
+    tag {
+      value = "pathfinder"
+    }
+
+    tag {
+      value = "FACT_SHEET_ARCHIVED"
+    }
   }
 }`, name)
 }
@@ -185,12 +197,18 @@ func TestPackageTagSets(t *testing.T) {
 		[]string{"a", "b"},
 		[]string{"c", "d"},
 	}
-	expectedOutput := []map[string][]string{
-		map[string][]string{
-			"tags": []string{"a", "b"},
+	expectedOutput := []map[string][]map[string]string{
+		map[string][]map[string]string{
+			"tag": []map[string]string{
+				map[string]string{"value": "a"},
+				map[string]string{"value": "b"},
+			},
 		},
-		map[string][]string{
-			"tags": []string{"c", "d"},
+		map[string][]map[string]string{
+			"tag": []map[string]string{
+				map[string]string{"value": "c"},
+				map[string]string{"value": "d"},
+			},
 		},
 	}
 
