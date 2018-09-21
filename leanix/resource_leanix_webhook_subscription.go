@@ -2,7 +2,6 @@ package leanix
 
 import (
 	"errors"
-
 	"github.com/hashicorp/terraform/helper/schema"
 )
 
@@ -63,11 +62,16 @@ func resourceLeanixWebhookSubscription() *schema.Resource {
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"tags": {
-							Type:     schema.TypeList,
-							Optional: true,
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
+						"tag": &schema.Schema{
+							Type:     schema.TypeSet,
+							Required: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"value": &schema.Schema{
+										Type:     schema.TypeString,
+										Required: true,
+									},
+								},
 							},
 						},
 					},
@@ -188,18 +192,24 @@ func extractTagSets(value interface{}) [][]string {
 	for setIndex, rawTagSet := range value.(*schema.Set).List() {
 		extractedTagSets = append(extractedTagSets, []string{})
 		castedTagSet := rawTagSet.(map[string]interface{})
-		for _, tag := range castedTagSet["tags"].([]interface{}) {
-			castedTag := tag.(string)
-			extractedTagSets[setIndex] = append(extractedTagSets[setIndex], castedTag)
+		for _, tag := range castedTagSet["tag"].(*schema.Set).List() {
+			castedTag := tag.(map[string]interface{})
+			tagValue := castedTag["value"].(string)
+			extractedTagSets[setIndex] = append(extractedTagSets[setIndex], tagValue)
 		}
 	}
 	return extractedTagSets
 }
 
-func packageTagSets(tagSets [][]string) []map[string][]string {
-	var packagedTagSets []map[string][]string
+func packageTagSets(tagSets [][]string) []map[string][]map[string]string {
+	var packagedTagSets []map[string][]map[string]string
 	for _, tagSet := range tagSets {
-		tagsMap := map[string][]string{"tags": tagSet}
+		var tagValues []map[string]string
+		for _, tag := range tagSet {
+			tagValue := map[string]string{"value": tag}
+			tagValues = append(tagValues, tagValue)
+		}
+		tagsMap := map[string][]map[string]string{"tag": tagValues}
 		packagedTagSets = append(packagedTagSets, tagsMap)
 	}
 	return packagedTagSets
