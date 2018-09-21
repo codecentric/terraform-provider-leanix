@@ -39,19 +39,21 @@ resource "leanix_webhook_subscription" "example" {
   workspace_id         = "aa32abbf-8093-410d-a090-10c7735952cf"
 
   tag_set {
-    tags = ["pathfinder", "FACT_SHEET_CREATED"]
+    tag {
+      value = "pathfinder"
+    }
+    tag {
+      value = "FACT_SHEET_CREATED"
+    }
   }
 
   tag_set {
-    tags = ["pathfinder", "FACT_SHEET_UPDATED"]
-  }
-
-  tag_set {
-    tags = ["pathfinder", "FACT_SHEET_ARCHIVED"]
-  }
-
-  tag_set {
-    tags = ["pathfinder", "FACT_SHEET_DELETED"]
+    tag {
+      value = "pathfinder"
+    }
+    tag {
+      value = "FACT_SHEET_UPDATED"
+    }
   }
 }
 ```
