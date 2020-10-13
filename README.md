@@ -1,6 +1,6 @@
 # Terraform Provider LeanIX
 
-[![Build Status](https://travis-ci.org/codecentric/terraform-provider-leanix.svg?branch=master)](https://travis-ci.org/codecentric/terraform-provider-leanix)
+![CI Build Status](https://github.com/codecentric/terraform-provider-leanix/workflows/CI/badge.svg?branch=master)
 
 ## Description
 
