@@ -85,6 +85,7 @@ After pushing the tags the binaries will be built and published as a GitHub rele
 
 ```sh
 git checkout master
-git tag v2.8.1
+git pull origin master
+git tag -a v2.8.1
 git push origin master --tags
 ```
