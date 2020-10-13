@@ -21,7 +21,7 @@ provider "leanix" {
 
 ### Webhook Subscription
 
-The webhook subscription resource is used to manage webhook subscriptions in LeanIX. For more information please refer to the official [webhooks documentation](https://dev.leanix.net/docs/webhooks) or [API reference](https://svc.leanix.net/services/webhooks/v1/docs/#/).
+The webhook subscription resource is used to manage webhook subscriptions in LeanIX. For more information please refer to the official [webhooks documentation](https://dev.leanix.net/docs/webhooks) or [API reference](https://eu-svc.leanix.net/services/webhooks/v1/docs/#/).
 
 #### Example
 
