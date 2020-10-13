@@ -1,5 +1,5 @@
-name: Checks after PR or push
-on: [push, pull_request]
+name: Checks after each push
+on: [push]
 jobs:
   checks:
     runs-on: ubuntu-latest
