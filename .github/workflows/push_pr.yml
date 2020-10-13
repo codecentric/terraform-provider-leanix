@@ -1,4 +1,4 @@
-name: release
+name: Checks after PR or push
 on: [push, pull_request]
 jobs:
   checks:
