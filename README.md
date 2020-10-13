@@ -1,6 +1,6 @@
 # Terraform Provider LeanIX
 
-[![Build Status](https://travis-ci.org/codecentric/terraform-provider-leanix.svg?branch=master)](https://travis-ci.org/codecentric/terraform-provider-leanix)
+![CI Build Status](https://github.com/codecentric/terraform-provider-leanix/workflows/CI/badge.svg?branch=master)
 
 ## Description
 
@@ -85,6 +85,7 @@ After pushing the tags the binaries will be built and published as a GitHub rele
 
 ```sh
 git checkout master
-git tag v2.8.1
+git pull origin master
+git tag -a v2.8.1
 git push origin master --tags
 ```

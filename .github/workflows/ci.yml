@@ -1,4 +1,4 @@
-name: Checks after each push
+name: CI
 on: [push]
 jobs:
   checks:
