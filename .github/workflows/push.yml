@@ -1,0 +1,15 @@
+name: Checks after each push
+on: [push]
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      # This stuff is duplicated in the release workflow. If you know how to keep it DRY, go ahead.. :-)
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.15
+      - name: Run unit tests
+        run: go test -v ./...
