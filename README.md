@@ -79,7 +79,7 @@ Then you can rename it to `terraform-provider-leanix` and place it inside the fo
 
 ## Release
 
-To release a new version of the provider you need to add a git tag in the form of `v${x}.${y}.\${z}`, e.g. `v1.2.3`. Pre-release tags are also supported (`v1.1.2-rc1`, `v2.0.0-alpha1`).
+To release a new version of the provider you need to add a git tag in the form of `v${x}.${y}.${z}`, e.g. `v1.2.3`. Pre-release tags are also supported (`v1.1.2-rc1`, `v2.0.0-alpha1`).
 
 After pushing the tags the binaries will be built and published as a GitHub release by GitHub Actions.
 
