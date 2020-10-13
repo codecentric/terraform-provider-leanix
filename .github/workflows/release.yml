@@ -2,8 +2,7 @@ name: Release
 on:
   push:
     tags:
-      # matches v1.2.3, v1.2.3-alpha, v10.100.1000-rc1
-      - v[0-9].[0-9]+.[0-9]+.+
+      - 'v*'
 jobs:
   release:
     runs-on: ubuntu-latest
