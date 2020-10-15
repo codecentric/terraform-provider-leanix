@@ -11,9 +11,20 @@ This is a custom [Terraform provider](https://www.terraform.io/docs/providers/in
 The LeanIX provider requires a valid LeanIX URL and an API key to authenticate. Please make sure that the API key has the required permissions to manage the resources you want to use. You can either set the URL and API token directly in the provider, or use the environment variables.
 
 ```hcl
+terraform {
+  required_version = ">= 0.13"
+
+  required_providers {
+    leanix = {
+      source  = "codecentric/leanix"
+      version = "1.0.0"
+    }
+  }
+}
+
 provider "leanix" {
-  url         = "https://svc.leanix.net"                                                     // = LEANIX_URL
-  auth_header = "Basic ${base64encode("apitoken:aVQEzWKwE2sSp3rhVKWwaVQEzWKwE2sSp3rhVKWw")}" // = LEANIX_AUTH_HEADER
+  url         = "https://eu-svc.leanix.net"                        # = LEANIX_URL
+  auth_header = "Basic ${base64encode("apitoken:YOUR_API_TOKEN")}" # = LEANIX_AUTH_HEADER
 }
 ```
 
@@ -81,7 +92,7 @@ Then you can rename it to `terraform-provider-leanix` and place it inside the fo
 
 To release a new version of the provider you need to add a git tag in the form of `v${x}.${y}.${z}`, e.g. `v1.2.3`. Pre-release tags are also supported (`v1.1.2-rc1`, `v2.0.0-alpha1`).
 
-After pushing the tags the binaries will be built and published as a GitHub release by GitHub Actions.
+After pushing the tags the binaries will be built and published automatically as a GitHub release by GitHub Actions.
 
 ```sh
 git checkout master
@@ -89,3 +100,11 @@ git pull origin master
 git tag -a v2.8.1
 git push origin master --tags
 ```
+
+### Terraform Registry
+
+[When publishing the provider](https://www.terraform.io/docs/registry/providers/publishing.html) on the [Terraform Registry](https://registry.terraform.io/browse/providers) the release artifacts are signed with a GPG private key and then validated by Terraform with the public key.
+
+The private key is set as a GitHub secret (`GPG_PRIVATE_KEY`) with a passphrase (`PASSPHRASE`). The secrets are stored in the codecentric shared 1Password safe.
+
+To update the GPG public key in the Terraform Registry you need to be owner of the GitHub organisation.
