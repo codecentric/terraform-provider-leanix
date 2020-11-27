@@ -69,12 +69,6 @@ resource "leanix_webhook_subscription" "example" {
 }
 ```
 
-## Installation
-
-The provider needs to be installed as a [third-party plugin](https://www.terraform.io/docs/configuration/providers.html#third-party-plugins). A quick and convenient way is to download the correct binary for your platform from the [GitHub release page](https://github.com/codecentric/terraform-provider-leanix/releases).
-
-Then you can rename it to `terraform-provider-leanix` and place it inside the folder containing your `.tf` files. Terraform will load the provider plugin on startup automatically based on the filename `terraform-provider-*`.
-
 ## Building from Source
 
 1. Install dependencies with `go get`
