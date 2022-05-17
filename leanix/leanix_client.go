@@ -72,7 +72,7 @@ func (leanix *LeanixClient) getAuthorizationHeader() (string, error) {
 		}
 
 		if resp.StatusCode != 200 {
-			return "", errors.New(fmt.Sprintf("Status code must be 200 but is %s", resp.Body))
+			return "", errors.New(fmt.Sprintf("Status code must be 200 but is %d", resp.StatusCode))
 		}
 
 		defer resp.Body.Close()
